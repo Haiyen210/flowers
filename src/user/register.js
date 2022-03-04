@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 import router from "../router";
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css'
 export default function() {
 
     const register = ref({
@@ -92,6 +94,13 @@ export default function() {
             } else if (regs != null) {
                 regs.push(register.value);
                 localStorage.setItem('registers', JSON.stringify(regs));
+                createToast({
+                    title: 'Thành công',
+                    description: 'Đăng ký tài khoản thành công!!!!',
+                    type: 'success',
+                    timeout: 1000,
+
+                })
             }
             router.push('/login');
         }

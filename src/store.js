@@ -1,4 +1,6 @@
 import { createStore } from 'vuex';
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css'
 export const store = createStore({
     state: {
         cart: JSON.parse(localStorage.getItem("cart")),
@@ -41,13 +43,13 @@ export const store = createStore({
             if (state.cart != null) {
 
                 localStorage.setItem("cart", JSON.stringify(state.cart));
-                // createToast({
-                //     title: 'Thành công',
-                //     description: 'Thêm sản phẩm vào giỏ hàng thành công',
-                //     type: 'success',
-                //     timeout: 1000
+                createToast({
+                    title: 'Thành công',
+                    description: 'Thêm sản phẩm vào giỏ hàng thành công',
+                    type: 'success',
+                    timeout: 1000,
 
-                // })
+                })
             }
         },
         onCount(state, ProId) {

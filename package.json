@@ -13,9 +13,11 @@
     "core-js": "^3.6.5",
     "jw-vue-pagination": "^1.0.3",
     "mosha-vue-toastify": "^1.0.23",
+    "v3-infinite-loading": "^1.0.5",
     "vue": "^3.0.0",
     "vue-axios": "^3.4.1",
     "vue-router": "^4.0.12",
+    "vue-scroll-shadow": "^0.1.0",
     "vue3-carousel": "^0.1.36",
     "vuex": "^4.0.2"
   },

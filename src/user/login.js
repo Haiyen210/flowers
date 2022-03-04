@@ -1,5 +1,6 @@
 import { ref } from "vue";
-
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css'
 export default function() {
     const login = ref({
         name: "",
@@ -78,6 +79,13 @@ export default function() {
         if (errorPassword.value.status == false && errorEmail.value.status == false) {
             login.value.name = names;
             localStorage.setItem('users', JSON.stringify(login.value));
+            createToast({
+                title: 'Thành công',
+                description: 'Đăng nhập thành công!!!!',
+                type: 'success',
+                timeout: 1000,
+
+            })
             document.location.href = "/";
 
         }

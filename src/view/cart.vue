@@ -14,10 +14,10 @@
         <div
             class="container"
             style="padding-top: 7rem; padding-bottom: 7rem"
-            v-if="cart && user && names == user.name"
+            v-if="user"
         >
             <div class="row">
-                <div class="table-responsive">
+                <div class="table-responsive" v-if="names == user.name && cart && user">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -82,6 +82,16 @@
                         <a v-on:click="onClear">Clear</a>
                     </div>
                 </div>
+                <div class="container" v-else>
+                    <div class="icon_hand">
+                        <i class="fas fa-hand-point-down"></i>
+                    </div>
+                    <div class="alert alert-danger">
+                        <strong>
+                            <router-link :to="{ name: 'Product', params: {} }">Mua Ngay!</router-link>
+                        </strong> Hãy ấn vào đây để tiếp tục mua hàng.
+                    </div>
+                </div>
             </div>
             <div class="row pt-5">
                 <div class="col-md-6">
@@ -113,9 +123,9 @@
             </div>
         </div>
         <div class="container" v-else>
-           <div class="icon_hand">
-                <i class=" fas fa-hand-point-down "></i>
-           </div>
+            <div class="icon_hand">
+                <i class="fas fa-hand-point-down"></i>
+            </div>
             <div class="alert alert-danger">
                 <strong>
                     <router-link :to="{ name: 'Login', params: {} }">Đăng Nhập Ngay!</router-link>
@@ -157,7 +167,7 @@ export default {
         }
         function onCheckOut() {
             if (cart) {
-                 router.replace({ name: "CheckOut" });
+                router.replace({ name: "CheckOut" });
             } else {
                 alert("Hãy Thêm Sản Phẩm Vào Giỏ Hàng")
             }

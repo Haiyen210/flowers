@@ -83,7 +83,11 @@
                                                     </li>
 
                                                     <li class="clearfix">
-                                                        <button class="btn btn-1" type="submit" v-on:click="onLogin()">
+                                                        <button
+                                                            class="btn btn-1"
+                                                            type="submit"
+                                                            v-on:click="onLogin()"
+                                                        >
                                                             <router-link
                                                                 :to="{ name: 'Login', params: {} }"
                                                             >Đăng Nhập</router-link>
@@ -118,23 +122,39 @@
                     <ul class="nav justify-content-end" style="margin-top: -38px;">
                         <li class="nav-item">
                             <div class="nav-search">
-                                <form class="search" action="/search">
+                                <form class="search" action>
                                     <input
                                         type="text"
                                         name="q"
                                         class="search-box"
                                         placeholder="Tìm kiếm ..."
-                                        value
+                                        v-model="query"
                                     />
-                                    <button class="search-submit" type="submit">
+                                    <button
+                                        class="search-submit"
+                                        type="submit"
+                                        v-on:click="onToggleModal"
+                                    >
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </form>
+                                <div v-if="query" class="search-list" v-on:click="scroll(0, 100);">
+                                    
+                                        <ul v-for="proc in productFilter" :key="proc.id">
+                                            <li>
+                                                <router-link
+                                                    :to="{ name: 'Detail', params: { id: proc.id } }"
+                                                >{{ proc.name }}</router-link>
+                                            </li>
+                                        </ul>
+                                    
+                                </div>
                             </div>
                         </li>
                         <li class="nav-item">
                             <router-link class="nav-link" :to="{ name: 'Cart', params: {} }">
-                                <img src="../assets/images/bg-cart.png" /><span class="">{{total}}</span>
+                                <img src="../assets/images/bg-cart.png" />
+                                <span class>{{ total }}</span>
                             </router-link>
                         </li>
                     </ul>
@@ -154,7 +174,10 @@
                                 </li>
                                 <li class="nav-item text-center">
                                     <img src="../assets/images/support.png" />
-                                   <router-link class="nav-link" :to="{name: 'Contact', params:{}}"> HỖ TRỢ</router-link>
+                                    <router-link
+                                        class="nav-link"
+                                        :to="{ name: 'Contact', params: {} }"
+                                    >HỖ TRỢ</router-link>
                                 </li>
                                 <li class="nav-item text-center">
                                     <img src="../assets/images/blog.png" />
@@ -197,11 +220,18 @@
 import useLogin from "../user/login"
 import { ref } from '@vue/reactivity';
 import store from "../store";
+import { computed } from '@vue/runtime-core';
+
 export default {
+
     setup() {
         const { onLogin, login, errorEmail, successEmail, errorPassword, successPassword } = useLogin();
+        store.dispatch('fetchAll');
+        const Prod = computed(() => store.state.prod);
         let user_login = JSON.parse(localStorage.getItem('users'));
         const user_name = ref("");
+        const query = ref("");
+        const isShowModal = ref(false);
         if (user_login) {
             user_name.value = user_login.name;
         } else {
@@ -212,15 +242,34 @@ export default {
             document.location.href = "/login";
         }
         let total = 0;
-        if(user_login && user_name.value){
-             total = store.state.cart.length;
-        }else{
+        if (user_login && user_name.value && store.state.cart) {
+            total = store.state.cart.length;
+        } else {
             total = 0;
         }
-       
-        console.log(total);
+        const productFilter = computed(() => {
+            return Prod.value.filter((Prod) => {
+                return (
+                    Prod.name
+                        .toLowerCase()
+                        .indexOf(query.value.toLowerCase()) != -1
+                );
+            });
+        });
+        console.log(productFilter);
+        function onToggleModal() {
+            isShowModal.value = !isShowModal.value
+            console.log(!isShowModal.value);
 
-        return { user_login, user_name, logout, onLogin, login, errorEmail, successEmail, errorPassword, successPassword,total }
+        }
+
+
+
+
+        return {
+            user_login, user_name, logout, onLogin, login, errorEmail,
+            successEmail, errorPassword, successPassword, total, query, productFilter, onToggleModal
+        }
     }
 }
 
